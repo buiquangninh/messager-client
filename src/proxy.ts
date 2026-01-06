@@ -14,22 +14,18 @@ export async function proxy(req: NextRequest) {
   const isAuthRoute = authRoutes.includes(pathname);
 
   if (!accessToken && refreshToken && isProtectedRoute) {
-    console.log("111");
     try {
-      // Gọi sang Backend Express để lấy AccessToken mới
       const res = await fetch(`http://localhost:3000/api/auth/refresh`, {
         method: "POST",
         headers: {
           Cookie: `refreshToken=${refreshToken}`,
+          "Content-Type": "application/json",
         },
       });
-
-      console.log('res', res)
 
       if (res.ok) {
         const nextResponse = NextResponse.next();
 
-        // Lấy các Set-Cookie từ Backend (chứa accessToken mới) và đính vào response gửi về trình duyệt
         const setCookie = res.headers.get("set-cookie");
         if (setCookie) {
           nextResponse.headers.set("set-cookie", setCookie);

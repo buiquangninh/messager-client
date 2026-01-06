@@ -1,20 +1,19 @@
-import { authFetch } from "@/lib/auth-fetch";
 import Sidebar from "../components/SideBar/Sidebar";
 import UserList from "./components/UserList";
+import { getFriends } from "@/services/friendsService";
 
 export default async function UsersLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const res = await authFetch("/friends");
-  const users = await res.json();
-  //   console.log("users", users);
+  const friends = await getFriends();
+  console.log("friends", friends);
 
   return (
     <Sidebar>
       <div className="h-full">
-        <UserList items={users} />
+        <UserList items={friends} />
         {children}
       </div>
     </Sidebar>
