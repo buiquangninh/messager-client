@@ -5,12 +5,16 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-export default function AuthProvider({ children }: { children: ReactNode }) {
-  const { user, loading, fetchCurrentUser } = useAuthStore();
-  const router = useRouter();
+export default function ProtectedRoute({ children }: { children: ReactNode }) {
+  const { accessToken, user, loading, fetchCurrentUser, refresh } =
+    useAuthStore();
 
   const init = async () => {
-    if (!user) {
+    if (!accessToken) {
+      await refresh();
+    }
+
+    if (accessToken && !user) {
       await fetchCurrentUser();
     }
   };
@@ -18,12 +22,6 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     init();
   }, []);
-
-  useEffect(() => {
-    if (!loading && user) {
-      router.push("/users");
-    }
-  }, [user, loading, router]);
 
   return children;
 }

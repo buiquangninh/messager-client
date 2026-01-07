@@ -13,31 +13,6 @@ export async function proxy(req: NextRequest) {
   );
   const isAuthRoute = authRoutes.includes(pathname);
 
-  if (!accessToken && refreshToken && isProtectedRoute) {
-    try {
-      const res = await fetch(`http://localhost:3000/api/auth/refresh`, {
-        method: "POST",
-        headers: {
-          Cookie: `refreshToken=${refreshToken}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (res.ok) {
-        const nextResponse = NextResponse.next();
-
-        const setCookie = res.headers.get("set-cookie");
-        if (setCookie) {
-          nextResponse.headers.set("set-cookie", setCookie);
-        }
-        return nextResponse;
-      }
-    } catch (error) {
-      console.error("Refresh token failed in middleware:", error);
-      return NextResponse.redirect(new URL("/", req.url));
-    }
-  }
-
   if (!accessToken && !refreshToken && isProtectedRoute) {
     return NextResponse.redirect(new URL("/", req.url));
   }

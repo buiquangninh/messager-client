@@ -7,7 +7,7 @@ export default async function UsersLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const friends = await getFriends();
+    const friends = await getFriends();
   console.log("friends", friends);
 
   return (

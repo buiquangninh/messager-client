@@ -37,9 +37,9 @@ const UserList: React.FC<UserListProps> = ({ items }) => {
             People
           </div>
         </div>
-        {/* {items.map((item) => (
+        {items.map((item) => (
           <UserBox key={item._id} data={item} />
-        ))} */}
+        ))}
       </div>
     </aside>
   );

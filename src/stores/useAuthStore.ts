@@ -8,10 +8,11 @@ import { persist } from "zustand/middleware";
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
+      accessToken: null,
       user: null,
       loading: false,
       clearState: () => {
-        set({ user: null, loading: false });
+        set({ accessToken: null, user: null, loading: false });
         localStorage.clear();
       },
       signUp: async (firstName, lastName, username, email, password) => {
@@ -43,7 +44,9 @@ export const useAuthStore = create<AuthState>()(
 
           localStorage.clear();
 
-          await authService.signIn(username, password);
+          const { accessToken } = await authService.signIn(username, password);
+
+          set({ accessToken });
 
           await get().fetchCurrentUser();
           toast.success("Successfully signed in!");
@@ -63,12 +66,28 @@ export const useAuthStore = create<AuthState>()(
         try {
           set({ loading: true });
           await authService.logout();
-          set({ user: null });
+          get().clearState();
           toast.success("Successfully logged out!");
         } catch (error) {
           console.log("Error during logout:", error);
         } finally {
           set({ loading: false });
+        }
+      },
+      refresh: async () => {
+        try {
+          const { user, fetchCurrentUser } = get();
+
+          const { accessToken } = await authService.refresh();
+
+          set({ accessToken });
+
+          if (!user) {
+            await fetchCurrentUser();
+          }
+        } catch (error) {
+          console.log("Error during refresh:", error);
+          get().clearState();
         }
       },
       fetchCurrentUser: async () => {
