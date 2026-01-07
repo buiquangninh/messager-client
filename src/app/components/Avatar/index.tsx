@@ -11,7 +11,7 @@ const Avatar: React.FC<AvatarProps> = ({ user }) => {
   const isActive = true;
 
   return (
-    <div className="relative">
+    <div className="relative flex">
       <div
         className="
         relative 

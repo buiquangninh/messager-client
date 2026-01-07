@@ -11,8 +11,6 @@ export async function GET() {
     },
   });
 
-  console.log("res", res);
-
   if (!res.ok) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
