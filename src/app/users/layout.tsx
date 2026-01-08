@@ -7,8 +7,7 @@ export default async function UsersLayout({
 }: {
   children: React.ReactNode;
 }) {
-    const friends = await getFriends();
-  console.log("friends", friends);
+  const friends = await getFriends();
 
   return (
     <Sidebar>

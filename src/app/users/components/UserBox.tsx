@@ -1,14 +1,41 @@
 import Avatar from "@/app/components/Avatar";
+import api from "@/lib/axios";
 import { User } from "@/types/user";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 
 interface UserBoxProps {
   data: User;
 }
 
 const UserBox: React.FC<UserBoxProps> = ({ data }) => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async () => {
+    if (loading) return;
+
+    setLoading(true);
+
+    try {
+      const res = await api.post("/conversations", {
+        recipientId: data._id,
+      });
+
+      router.push(`/conversations/${res.data._id}`);
+    } catch (error) {
+      console.error("Conversation error: ", error);
+      toast.error("Please try again!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div
+        onClick={handleClick}
         className="
           w-full 
           relative 
