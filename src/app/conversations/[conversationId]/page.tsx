@@ -13,7 +13,7 @@ const ChatId = async ({ params }: { params: IParams }) => {
   const conversation = await getConversationById(conversationId);
   const messages = [];
 
-  if (!conversation) {
+  if (!conversation.length) {
     return (
       <div className="lg:pl-80 h-full">
         <div className="h-full flex flex-col">
