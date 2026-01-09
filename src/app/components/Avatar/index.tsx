@@ -1,10 +1,11 @@
 "use client";
 
+import { Participant } from "@/types/conversation";
 import { User } from "@/types/user";
 import Image from "next/image";
 
 interface AvatarProps {
-  user?: User;
+  user?: Participant | User;
 }
 
 const Avatar: React.FC<AvatarProps> = ({ user }) => {

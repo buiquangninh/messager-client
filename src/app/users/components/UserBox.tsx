@@ -19,7 +19,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
     setLoading(true);
 
     try {
-      const res = await api.post("/conversations", {
+      const res = await api.post("/conversation", {
         recipientId: data._id,
       });
 

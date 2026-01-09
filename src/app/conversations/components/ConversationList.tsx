@@ -2,20 +2,18 @@
 import { useState } from "react";
 import { MdOutlineGroupAdd } from "react-icons/md";
 import clsx from "clsx";
-import { User } from "@/types/user";
 import useConversation from "@/hooks/useConversation";
 import ConversationBox from "./ConversationBox";
+import { Conversation } from "@/types/conversation";
 
 interface ConversationListProps {
-  users: User[];
-  title?: string;
+  title: string;
+  initialItems: Conversation[];
 }
 
 const ConversationList: React.FC<ConversationListProps> = ({
   initialItems,
-  users,
 }) => {
-
   const { conversationId, isOpen } = useConversation();
 
   return (
@@ -56,9 +54,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
           </div>
           {initialItems.map((item) => (
             <ConversationBox
-              key={item.id}
+              key={item._id}
               data={item}
-              selected={conversationId === item.id}
+              selected={conversationId === item._id}
             />
           ))}
         </div>
